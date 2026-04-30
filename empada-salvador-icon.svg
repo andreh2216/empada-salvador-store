@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+
+  <!-- Background circle (cream/beige) -->
+  <circle cx="100" cy="100" r="100" fill="#f5e6c8"/>
+
+  <!-- Brown circle background -->
+  <circle cx="100" cy="95" r="82" fill="#4a2010"/>
+
+  <!-- Steam wisps -->
+  <path d="M82 48 Q79 42 82 36 Q85 30 82 24" stroke="#c8a060" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M100 45 Q97 38 100 31 Q103 24 100 17" stroke="#c8a060" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M118 48 Q115 42 118 36 Q121 30 118 24" stroke="#c8a060" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+
+  <!-- Pie body (main dome) -->
+  <ellipse cx="100" cy="92" rx="52" ry="10" fill="#c87830"/>
+  <path d="M48 92 Q48 60 100 58 Q152 60 152 92 Z" fill="#d4893a"/>
+
+  <!-- Crust top rim highlight -->
+  <path d="M50 92 Q50 61 100 59 Q150 61 150 92" stroke="#e8a050" stroke-width="2" fill="none" opacity="0.5"/>
+
+  <!-- Crimped edge (pie bottom base) -->
+  <ellipse cx="100" cy="98" rx="56" ry="12" fill="#b56820"/>
+
+  <!-- Crimped detail bumps -->
+  <path d="M44 98 Q47 106 50 98 Q53 106 56 98 Q59 106 62 98 Q65 106 68 98 Q71 106 74 98 Q77 106 80 98 Q83 106 86 98 Q89 106 92 98 Q95 106 98 98 Q101 106 104 98 Q107 106 110 98 Q113 106 116 98 Q119 106 122 98 Q125 106 128 98 Q131 106 134 98 Q137 106 140 98 Q143 106 146 98 Q149 106 152 98 Q155 106 156 98" stroke="#8a4010" stroke-width="1.5" fill="none"/>
+
+  <!-- Bottom plate/base -->
+  <ellipse cx="100" cy="105" rx="56" ry="8" fill="#9a5018"/>
+
+  <!-- Banner / ribbon background -->
+  <rect x="22" y="118" width="156" height="24" rx="3" fill="#f5e6c8"/>
+
+  <!-- EMPADA text -->
+  <text x="100" y="134" 
+        font-family="Arial Black, sans-serif" 
+        font-size="15" 
+        font-weight="900" 
+        fill="#4a2010" 
+        text-anchor="middle" 
+        letter-spacing="3">EMPADA</text>
+
+  <!-- SALVADOR text below -->
+  <text x="100" y="158" 
+        font-family="Arial Black, sans-serif" 
+        font-size="11" 
+        font-weight="900" 
+        fill="#f5e6c8" 
+        text-anchor="middle" 
+        letter-spacing="4">SALVADOR</text>
+
+  <!-- Outer ring border -->
+  <circle cx="100" cy="95" r="82" fill="none" stroke="#c87830" stroke-width="3" opacity="0.4"/>
+
+</svg>
