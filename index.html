@@ -5,764 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Empada Salvador — Sabor da Bahia</title>
   <link rel="shortcut icon" href="/empada-salvador-icon.svg" type="image/x-icon">
+  <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,400&family=Instrument+Sans:wght@400;500&display=swap" rel="stylesheet"/>
-  <style>
-    :root {
-      --brown-dark: #2a1a0e;
-      --brown-mid:  #4a2e1a;
-      --brown-warm: #7a4a2a;
-      --caramel:    #c47b3a;
-      --gold:       #e8a84a;
-      --cream:      #f5e8d0;
-      --cream-light:#fdf6ea;
-      --white:      #fffcf5;
-      --red-bahia:  #c0392b;
-    }
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'Instrument Sans', sans-serif;
-      background: var(--brown-dark);
-      color: var(--cream);
-      overflow-x: hidden;
-      cursor: none;
-    }
-
-    /* Custom cursor */
-    .cursor {
-      width: 10px; height: 10px;
-      background: var(--gold);
-      border-radius: 50%;
-      position: fixed;
-      pointer-events: none;
-      z-index: 9999;
-      transform: translate(-50%, -50%);
-      transition: transform 0.1s, width 0.2s, height 0.2s;
-      mix-blend-mode: difference;
-    }
-    .cursor-ring {
-      width: 36px; height: 36px;
-      border: 1.5px solid var(--gold);
-      border-radius: 50%;
-      position: fixed;
-      pointer-events: none;
-      z-index: 9998;
-      transform: translate(-50%, -50%);
-      transition: transform 0.18s ease, width 0.25s, height 0.25s;
-      mix-blend-mode: difference;
-    }
-    .cursor.expand { width: 20px; height: 20px; }
-    .cursor-ring.expand { width: 60px; height: 60px; }
-
-    /* Grain overlay */
-    body::after {
-      content: '';
-      position: fixed; inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 999;
-      opacity: 0.45;
-    }
-
-    /* ─── NAV ─── */
-    nav {
-      position: fixed; top: 0; left: 0; right: 0;
-      z-index: 200;
-      padding: 1.4rem 4rem;
-      display: flex; justify-content: space-between; align-items: center;
-      background: rgba(42,26,14,0.8);
-      backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(232,168,74,0.12);
-    }
-
-    .nav-logo {
-      display: flex; align-items: center; gap: 0.8rem;
-    }
-    .logo-icon {
-      width: 42px; height: 42px;
-      background: var(--caramel);
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.3rem;
-    }
-    .logo-text {
-      font-family: 'Fraunces', serif;
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: var(--cream);
-      line-height: 1.1;
-    }
-    .logo-text small {
-      display: block;
-      font-size: 0.6rem;
-      font-family: 'Instrument Sans', sans-serif;
-      font-weight: 400;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--gold);
-      font-style: normal;
-    }
-
-    nav ul { list-style: none; display: flex; gap: 2.5rem; }
-    nav a {
-      text-decoration: none;
-      font-size: 0.75rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--cream);
-      opacity: 0.55;
-      transition: opacity 0.2s, color 0.2s;
-    }
-    nav a:hover { opacity: 1; color: var(--gold); }
-
-    .nav-cta {
-      background: var(--caramel);
-      color: var(--brown-dark) !important;
-      font-weight: 500 !important;
-      opacity: 1 !important;
-      padding: 0.55rem 1.3rem;
-      border-radius: 50px;
-      transition: background 0.2s, transform 0.2s !important;
-    }
-    .nav-cta:hover { background: var(--gold) !important; transform: translateY(-1px); }
-
-    /* ─── HERO ─── */
-    .hero {
-      min-height: 100vh;
-      display: flex; align-items: center;
-      position: relative;
-      overflow: hidden;
-      padding: 7rem 4rem 4rem;
-    }
-
-    .hero-bg {
-      position: absolute; inset: 0;
-      background:
-        radial-gradient(ellipse 70% 70% at 75% 50%, rgba(196,123,58,0.18) 0%, transparent 55%),
-        radial-gradient(ellipse 50% 80% at 20% 80%, rgba(192,57,43,0.1) 0%, transparent 50%),
-        linear-gradient(160deg, #2a1a0e 0%, #1a0f07 100%);
-    }
-
-    /* Decorative circle pattern */
-    .hero-circles {
-      position: absolute;
-      right: 8%;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 500px; height: 500px;
-    }
-    .circle-base {
-      position: absolute; inset: 0;
-      border-radius: 50%;
-      border: 1px solid rgba(232,168,74,0.1);
-      animation: rotateSlow 30s linear infinite;
-    }
-    .circle-base:nth-child(2) {
-      inset: 40px;
-      border-color: rgba(196,123,58,0.15);
-      animation-direction: reverse;
-      animation-duration: 20s;
-    }
-    .circle-base:nth-child(3) {
-      inset: 90px;
-      border-color: rgba(232,168,74,0.2);
-    }
-    .circle-fill {
-      position: absolute;
-      inset: 140px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 40% 40%, rgba(196,123,58,0.3), rgba(74,46,26,0.6));
-      display: flex; align-items: center; justify-content: center;
-      font-size: 8rem;
-      animation: float 6s ease-in-out infinite;
-    }
-    .dot-orbit {
-      position: absolute;
-      width: 8px; height: 8px;
-      background: var(--gold);
-      border-radius: 50%;
-      top: 0; left: 50%;
-      transform-origin: 0 250px;
-      animation: orbit 8s linear infinite;
-    }
-    .dot-orbit:nth-child(5) { animation-delay: -2.7s; }
-    .dot-orbit:nth-child(6) { animation-delay: -5.4s; }
-
-    @keyframes orbit {
-      from { transform: rotate(0deg) translateY(-250px); }
-      to   { transform: rotate(360deg) translateY(-250px); }
-    }
-    @keyframes rotateSlow {
-      from { transform: rotate(0deg); }
-      to   { transform: rotate(360deg); }
-    }
-    @keyframes float {
-      0%,100% { transform: translateY(0); }
-      50%      { transform: translateY(-14px); }
-    }
-
-    .hero-content {
-      position: relative; z-index: 2;
-      max-width: 580px;
-    }
-
-    .hero-tag {
-      display: inline-flex; align-items: center; gap: 0.6rem;
-      font-size: 0.7rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 2rem;
-      opacity: 0;
-      animation: fadeUp 0.8s 0.1s ease forwards;
-    }
-    .hero-tag::before, .hero-tag::after {
-      content: '';
-      width: 24px; height: 1px;
-      background: var(--gold);
-    }
-
-    .hero h1 {
-      font-family: 'Fraunces', serif;
-      font-size: clamp(4rem, 7vw, 7.5rem);
-      font-weight: 900;
-      line-height: 0.95;
-      margin-bottom: 1.8rem;
-      opacity: 0;
-      animation: fadeUp 0.9s 0.25s ease forwards;
-    }
-    .hero h1 .line1 { display: block; color: var(--cream); }
-    .hero h1 .line2 {
-      display: block;
-      color: var(--caramel);
-      font-style: italic;
-      font-weight: 300;
-      font-size: 0.7em;
-    }
-    .hero h1 .line3 { display: block; color: var(--gold); }
-
-    .hero-desc {
-      font-size: 1rem;
-      line-height: 1.75;
-      opacity: 0.6;
-      margin-bottom: 2.5rem;
-      max-width: 400px;
-      animation: fadeUp 0.9s 0.4s ease forwards;
-      opacity: 0;
-    }
-
-    .hero-actions {
-      display: flex; gap: 1rem; flex-wrap: wrap;
-      opacity: 0;
-      animation: fadeUp 0.9s 0.55s ease forwards;
-    }
-
-    .btn-gold {
-      background: var(--gold);
-      color: var(--brown-dark);
-      border: none;
-      padding: 1rem 2.2rem;
-      font-family: 'Instrument Sans', sans-serif;
-      font-size: 0.85rem;
-      font-weight: 500;
-      letter-spacing: 0.06em;
-      cursor: pointer;
-      border-radius: 4px;
-      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
-      text-decoration: none;
-      display: inline-block;
-    }
-    .btn-gold:hover {
-      background: var(--caramel);
-      color: var(--cream);
-      transform: translateY(-2px);
-      box-shadow: 0 12px 30px rgba(232,168,74,0.3);
-    }
-
-    .btn-ghost {
-      background: transparent;
-      color: var(--cream);
-      border: 1px solid rgba(245,232,208,0.3);
-      padding: 1rem 2.2rem;
-      font-family: 'Instrument Sans', sans-serif;
-      font-size: 0.85rem;
-      letter-spacing: 0.06em;
-      cursor: pointer;
-      border-radius: 4px;
-      transition: all 0.2s;
-      text-decoration: none;
-      display: inline-block;
-    }
-    .btn-ghost:hover {
-      border-color: var(--gold);
-      color: var(--gold);
-    }
-
-    .hero-stats {
-      display: flex; gap: 2.5rem;
-      margin-top: 3.5rem;
-      padding-top: 2rem;
-      border-top: 1px solid rgba(245,232,208,0.1);
-      opacity: 0;
-      animation: fadeUp 0.9s 0.7s ease forwards;
-    }
-    .stat-num {
-      font-family: 'Fraunces', serif;
-      font-size: 2rem;
-      font-weight: 700;
-      color: var(--gold);
-      display: block;
-      line-height: 1;
-    }
-    .stat-label {
-      font-size: 0.7rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      opacity: 0.45;
-      margin-top: 0.3rem;
-    }
-
-    /* ─── BAND ─── */
-    .band {
-      background: var(--caramel);
-      padding: 1.2rem 4rem;
-      overflow: hidden;
-      white-space: nowrap;
-    }
-    .band-track {
-      display: inline-flex;
-      gap: 3rem;
-      animation: ticker 18s linear infinite;
-      font-family: 'Fraunces', serif;
-      font-style: italic;
-      font-size: 1.1rem;
-      color: var(--brown-dark);
-    }
-    .band-track span { opacity: 0.5; }
-    @keyframes ticker {
-      from { transform: translateX(0); }
-      to   { transform: translateX(-50%); }
-    }
-
-    /* ─── SABORES ─── */
-    #sabores {
-      padding: 7rem 4rem;
-      background: var(--brown-dark);
-      position: relative;
-    }
-
-    .section-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      margin-bottom: 4rem;
-    }
-
-    .section-eyebrow {
-      font-size: 0.7rem;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: var(--caramel);
-      margin-bottom: 0.8rem;
-    }
-
-    .section-title {
-      font-family: 'Fraunces', serif;
-      font-size: clamp(2.2rem, 4vw, 3.5rem);
-      font-weight: 700;
-      line-height: 1.1;
-      color: var(--cream);
-    }
-    .section-title em { font-style: italic; color: var(--gold); font-weight: 300; }
-
-    .sabores-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1.2rem;
-    }
-
-    .sabor-card {
-      background: var(--brown-mid);
-      border-radius: 12px;
-      overflow: hidden;
-      border: 1px solid rgba(232,168,74,0.08);
-      transition: transform 0.3s, border-color 0.3s;
-      position: relative;
-    }
-    .sabor-card:hover {
-      transform: translateY(-6px);
-      border-color: rgba(232,168,74,0.3);
-    }
-
-    .sabor-img {
-      height: 180px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 4.5rem;
-      background: linear-gradient(135deg, rgba(196,123,58,0.15), rgba(42,26,14,0.5));
-      position: relative;
-    }
-
-    .sabor-badge {
-      position: absolute; top: 10px; left: 10px;
-      background: var(--red-bahia);
-      color: white;
-      font-size: 0.6rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      padding: 0.2rem 0.6rem;
-      border-radius: 3px;
-    }
-
-    .sabor-body { padding: 1.3rem; }
-    .sabor-body h3 {
-      font-family: 'Fraunces', serif;
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: var(--cream);
-      margin-bottom: 0.35rem;
-    }
-    .sabor-body p {
-      font-size: 0.75rem;
-      opacity: 0.5;
-      line-height: 1.5;
-      margin-bottom: 1rem;
-    }
-    .sabor-footer {
-      display: flex; justify-content: space-between; align-items: center;
-    }
-    .sabor-price {
-      font-family: 'Fraunces', serif;
-      font-size: 1.2rem;
-      color: var(--gold);
-    }
-    .sabor-btn {
-      background: rgba(232,168,74,0.12);
-      border: 1px solid rgba(232,168,74,0.25);
-      color: var(--gold);
-      padding: 0.4rem 0.9rem;
-      border-radius: 4px;
-      font-size: 0.7rem;
-      letter-spacing: 0.08em;
-      cursor: pointer;
-      transition: background 0.2s;
-      font-family: 'Instrument Sans', sans-serif;
-    }
-    .sabor-btn:hover { background: var(--gold); color: var(--brown-dark); }
-
-    /* ─── SOBRE ─── */
-    #sobre {
-      padding: 7rem 4rem;
-      background: var(--cream-light);
-      color: var(--brown-dark);
-      position: relative;
-      overflow: hidden;
-    }
-    #sobre::before {
-      content: 'EMPADA';
-      position: absolute;
-      font-family: 'Fraunces', serif;
-      font-size: 18vw;
-      font-weight: 900;
-      opacity: 0.04;
-      color: var(--brown-warm);
-      bottom: -2rem; right: -2rem;
-      pointer-events: none;
-      line-height: 1;
-    }
-
-    .sobre-inner {
-      display: grid;
-      grid-template-columns: 1fr 1.1fr;
-      gap: 7rem;
-      align-items: center;
-    }
-
-    .sobre-left .section-eyebrow { color: var(--caramel); }
-    .sobre-left .section-title { color: var(--brown-dark); }
-    .sobre-left .section-title em { color: var(--red-bahia); }
-
-    .sobre-left p {
-      font-size: 1rem;
-      line-height: 1.8;
-      opacity: 0.65;
-      margin: 1.5rem 0;
-    }
-
-    .sobre-right {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-    }
-
-    .sobre-tile {
-      background: white;
-      border-radius: 16px;
-      padding: 1.8rem;
-      border: 1px solid rgba(74,46,26,0.08);
-      box-shadow: 0 4px 20px rgba(74,46,26,0.05);
-      transition: transform 0.3s;
-    }
-    .sobre-tile:hover { transform: translateY(-4px); }
-    .sobre-tile:nth-child(2) { margin-top: 1.5rem; }
-    .sobre-tile:nth-child(4) { margin-top: -1.5rem; }
-
-    .tile-icon { font-size: 2rem; margin-bottom: 0.8rem; }
-    .tile-title {
-      font-family: 'Fraunces', serif;
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--brown-dark);
-      margin-bottom: 0.4rem;
-    }
-    .tile-text { font-size: 0.78rem; opacity: 0.55; line-height: 1.5; }
-
-    /* ─── ENCOMENDAS ─── */
-    #encomendas {
-      padding: 7rem 4rem;
-      background: var(--brown-mid);
-      position: relative;
-    }
-
-    .enc-inner {
-      display: grid;
-      grid-template-columns: 1.1fr 1fr;
-      gap: 6rem;
-      align-items: center;
-    }
-
-    .enc-steps {
-      display: flex; flex-direction: column; gap: 0;
-    }
-
-    .enc-step {
-      display: flex; gap: 1.5rem; align-items: flex-start;
-      padding: 1.8rem 0;
-      border-bottom: 1px solid rgba(245,232,208,0.08);
-      transition: padding-left 0.3s;
-    }
-    .enc-step:hover { padding-left: 0.8rem; }
-    .enc-step:last-child { border-bottom: none; }
-
-    .step-num {
-      font-family: 'Fraunces', serif;
-      font-size: 2.5rem;
-      font-weight: 900;
-      color: rgba(232,168,74,0.2);
-      line-height: 1;
-      flex-shrink: 0;
-      width: 50px;
-      transition: color 0.3s;
-    }
-    .enc-step:hover .step-num { color: var(--gold); }
-
-    .step-body h4 {
-      font-family: 'Fraunces', serif;
-      font-size: 1.05rem;
-      color: var(--cream);
-      margin-bottom: 0.4rem;
-    }
-    .step-body p { font-size: 0.8rem; opacity: 0.5; line-height: 1.5; }
-
-    .enc-cta-box {
-      background: linear-gradient(135deg, rgba(232,168,74,0.12), rgba(196,123,58,0.08));
-      border: 1px solid rgba(232,168,74,0.2);
-      border-radius: 20px;
-      padding: 3rem;
-      text-align: center;
-    }
-
-    .enc-emoji { font-size: 4rem; margin-bottom: 1rem; display: block; animation: float 4s ease-in-out infinite; }
-
-    .enc-cta-box h3 {
-      font-family: 'Fraunces', serif;
-      font-size: 1.8rem;
-      color: var(--cream);
-      margin-bottom: 0.8rem;
-    }
-    .enc-cta-box p {
-      font-size: 0.85rem;
-      opacity: 0.55;
-      margin-bottom: 2rem;
-      line-height: 1.6;
-    }
-
-    .wpp-btn {
-      background: #25D366;
-      color: white;
-      border: none;
-      padding: 1rem 2rem;
-      font-family: 'Instrument Sans', sans-serif;
-      font-size: 0.9rem;
-      font-weight: 500;
-      cursor: pointer;
-      border-radius: 6px;
-      display: inline-flex; align-items: center; gap: 0.6rem;
-      text-decoration: none;
-      transition: transform 0.2s, box-shadow 0.2s;
-      width: 100%;
-      justify-content: center;
-      margin-bottom: 0.8rem;
-    }
-    .wpp-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 30px rgba(37,211,102,0.35);
-    }
-
-    .insta-btn {
-      background: linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
-      color: white;
-      border: none;
-      padding: 0.85rem 2rem;
-      font-family: 'Instrument Sans', sans-serif;
-      font-size: 0.85rem;
-      font-weight: 500;
-      cursor: pointer;
-      border-radius: 6px;
-      display: inline-flex; align-items: center; gap: 0.6rem;
-      text-decoration: none;
-      transition: transform 0.2s, opacity 0.2s;
-      width: 100%;
-      justify-content: center;
-    }
-    .insta-btn:hover { transform: translateY(-1px); opacity: 0.9; }
-
-    /* ─── LOCALIZAÇÃO ─── */
-    #localizacao {
-      padding: 7rem 4rem;
-      background: var(--brown-dark);
-    }
-
-    .local-inner {
-      display: grid;
-      grid-template-columns: 1fr 1.5fr;
-      gap: 4rem;
-      align-items: center;
-    }
-
-    .local-info h3 {
-      font-family: 'Fraunces', serif;
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: var(--cream);
-      margin-bottom: 2rem;
-    }
-
-    .local-item {
-      display: flex; gap: 1rem; align-items: flex-start;
-      margin-bottom: 1.5rem;
-    }
-    .local-icon {
-      width: 40px; height: 40px;
-      background: rgba(232,168,74,0.1);
-      border-radius: 8px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.1rem;
-      flex-shrink: 0;
-      border: 1px solid rgba(232,168,74,0.15);
-    }
-    .local-text strong { display: block; font-size: 0.8rem; color: var(--gold); margin-bottom: 0.2rem; letter-spacing: 0.08em; text-transform: uppercase; }
-    .local-text span { font-size: 0.9rem; opacity: 0.7; }
-
-    .map-frame {
-      border-radius: 16px;
-      overflow: hidden;
-      border: 1px solid rgba(232,168,74,0.15);
-      height: 340px;
-      background: var(--brown-mid);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.8rem;
-      opacity: 0.5;
-      flex-direction: column;
-      gap: 1rem;
-      position: relative;
-    }
-
-    .map-placeholder {
-      width: 100%; height: 100%;
-      background: linear-gradient(135deg, rgba(196,123,58,0.1) 0%, rgba(42,26,14,0.8) 100%);
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      gap: 0.8rem;
-    }
-    .map-placeholder .pin-emoji { font-size: 3rem; animation: float 3s ease-in-out infinite; }
-    .map-placeholder p { font-size: 0.9rem; opacity: 0.6; text-align: center; line-height: 1.5; }
-    .map-placeholder a {
-      color: var(--gold);
-      font-size: 0.8rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      text-decoration: none;
-      border-bottom: 1px solid rgba(232,168,74,0.4);
-      padding-bottom: 2px;
-    }
-
-    /* ─── FOOTER ─── */
-    footer {
-      background: #1a0f07;
-      padding: 3rem 4rem;
-      border-top: 1px solid rgba(232,168,74,0.1);
-      display: flex; justify-content: space-between; align-items: center;
-      flex-wrap: wrap; gap: 1rem;
-    }
-
-    .footer-logo {
-      font-family: 'Fraunces', serif;
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: var(--cream);
-    }
-    .footer-logo em { font-style: italic; color: var(--caramel); font-weight: 300; }
-
-    .footer-copy {
-      font-size: 0.72rem;
-      opacity: 0.3;
-      letter-spacing: 0.05em;
-    }
-
-    .footer-links { display: flex; gap: 1.5rem; }
-    .footer-links a {
-      font-size: 0.72rem;
-      text-decoration: none;
-      opacity: 0.4;
-      color: var(--cream);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      transition: opacity 0.2s;
-    }
-    .footer-links a:hover { opacity: 1; color: var(--gold); }
-
-    /* ─── ANIMS ─── */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    .reveal {
-      opacity: 0;
-      transform: translateY(22px);
-      transition: opacity 0.7s ease, transform 0.7s ease;
-    }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
-
-    /* ─── RESPONSIVE ─── */
-    @media (max-width: 900px) {
-      nav { padding: 1rem 1.5rem; }
-      nav ul { display: none; }
-      .hero { padding: 6rem 1.5rem 3rem; }
-      .hero-circles { display: none; }
-      #sabores, #sobre, #encomendas, #localizacao { padding: 4rem 1.5rem; }
-      .band { padding: 1.2rem 1.5rem; }
-      .sabores-grid { grid-template-columns: 1fr 1fr; }
-      .sobre-inner, .enc-inner, .local-inner { grid-template-columns: 1fr; gap: 3rem; }
-      .sobre-right { grid-template-columns: 1fr 1fr; }
-      .sobre-tile:nth-child(2), .sobre-tile:nth-child(4) { margin-top: 0; }
-      footer { flex-direction: column; text-align: center; padding: 2rem 1.5rem; }
-      .section-head { flex-direction: column; align-items: flex-start; gap: 1rem; }
-      body { cursor: auto; }
-      .cursor, .cursor-ring { display: none; }
-    }
-  </style>
+ 
 </head>
 <body>
 
@@ -845,6 +90,8 @@
       </div>
       <a href="#encomendas" class="btn-ghost" style="white-space:nowrap;">Fazer pedido →</a>
     </div>
+
+    <div class="sabor-card reveal" style="background: linear-gradient(135deg, rgba(232,168,74,0.08), rgba(196,123,58,0.12)); border-color: rgba(232,168,74,0.2);"> <div class="sabor-img" style="background: linear-gradient(135deg,rgba(232,168,74,0.2),rgba(196,123,58,0.1));">✨</div> <div class="sabor-body"> <h3 style="color:var(--gold);">Sabor Especial do Dia</h3> <p>Toda semana uma surpresa nova. Pergunta pra gente qual é o sabor especial hoje!</p> <div class="sabor-footer"> <span class="sabor-price" style="font-size:0.85rem;opacity:0.6;">Consulte</span> <button class="sabor-btn" onclick="pedir('Sabor Especial do Dia')">Perguntar</button> </div> </div> </div>
       <h2 class="section-title"> <em>Tradicionais</em></h2>
     <div class="sabores-grid">
     
@@ -861,7 +108,7 @@
       </div>
 
       <div class="sabor-card reveal">
-        <div class="sabor-img">🦐</div>
+        <div class="sabor-img">🧀</div>
         <div class="sabor-body">
           <h3>Queijo e Orégano</h3>
           <p>Massa crocante coberta com queijo derretido e um toque especial de orégano, trazendo um sabor clássico e irresistível.</p>     
@@ -878,14 +125,14 @@
          <h3>Carne C/Requeijão</h3>
           <p>Carne suculenta desfiada combinada com requeijão cremoso, criando uma mistura irresistível de sabor e textura.</p>
           <div class="sabor-footer">
-            <span class="sabor-price">R$ 10</span>
+            <span class="sabor-price">R$ 140</span>
             <button class="sabor-btn" onclick="pedir('Carne Seca com Queijo')">Pedir</button>
           </div>
         </div>
       </div>
 
       <div class="sabor-card reveal">
-        <div class="sabor-img">🌿</div>
+        <div class="sabor-img">🌽</div>
         <div class="sabor-body">
              <h3>Milho Cremoso</h3>
              <p>Milho verde envolvido em um creme suave e saboroso, com textura aveludada e um toque especial que conquista a cada mordida.</p>
@@ -897,10 +144,10 @@
       </div>
 
       <div class="sabor-card reveal">
-        <div class="sabor-img">🐟</div>
+        <div class="sabor-img">🧅</div>
         <div class="sabor-body">
          <h3>Calabresa C/Cebola</h3>
-<p>Calabresa suculenta acompanhada de cebola levemente dourada, trazendo um sabor marcante e irresistível em cada pedaço.</p>
+        <p>Calabresa suculenta acompanhada de cebola levemente dourada, trazendo um sabor marcante e irresistível em cada pedaço.</p>
           <div class="sabor-footer">
             <span class="sabor-price">R$ 140,00</span>
             <button class="sabor-btn" onclick="pedir('Atum com Azeitona')">Pedir</button>
@@ -910,25 +157,124 @@
 
     
 
-      <div class="sabor-card reveal" style="background: linear-gradient(135deg, rgba(232,168,74,0.08), rgba(196,123,58,0.12)); border-color: rgba(232,168,74,0.2);">
-        <div class="sabor-img" style="background: linear-gradient(135deg,rgba(232,168,74,0.2),rgba(196,123,58,0.1));">✨</div>
-        <div class="sabor-body">
-          <h3 style="color:var(--gold);">Sabor Especial do Dia</h3>
-          <p>Toda semana uma surpresa nova. Pergunta pra gente qual é o sabor especial hoje!</p>
-          <div class="sabor-footer">
-            <span class="sabor-price" style="font-size:0.85rem;opacity:0.6;">Consulte</span>
-            <button class="sabor-btn" onclick="pedir('Sabor Especial do Dia')">Perguntar</button>
-          </div>
-        </div>
-      </div>
+
 
     </div>
   </section>
 
-    <section id="sabores">
-       <h2 class="section-title"> <em>Especiais</em></h2>
 
-    </section>
+<section id="sabores-af">
+  <h2 class="section-title"><em>Especiais</em></h2>
+
+  <div class="sabores-grid">
+    
+    <div class="sabor-card reveal">
+      <div class="sabor-img">🥩<span class="sabor-badge">Mais pedido</span></div>
+      <div class="sabor-body">
+        <h3>Carne Seca C/Requeijão</h3>
+        <p>Carne seca desfiada combinada com requeijão cremoso, trazendo um sabor marcante e irresistível.</p>
+        <div class="sabor-footer">
+          <span class="sabor-price">R$ 160,00</span>
+          <button class="sabor-btn" onclick="pedir('Frango com Catupiry')">Pedir</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="sabor-card reveal">
+      <div class="sabor-img">🧀</div>
+      <div class="sabor-body">
+        <h3>3 Queijos</h3>
+        <p>Mussarela, parmesão e catupiry unidos em uma combinação cremosa e cheia de sabor para os amantes de queijo.</p>
+        <div class="sabor-footer">
+          <span class="sabor-price">R$ 160,00</span>
+          <button class="sabor-btn" onclick="pedir('Atum com Azeitona')">Pedir</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="sabor-card reveal">
+      <div class="sabor-img">🐟</div>
+      <div class="sabor-body">
+        <h3>Bacalhau Cremoso</h3>
+        <p>Bacalhau desfiado envolvido em um creme especial e temperos selecionados, garantindo um sabor sofisticado e irresistível.</p>
+        <div class="sabor-footer">
+          <span class="sabor-price">R$ 160,00</span>
+          <button class="sabor-btn" onclick="pedir('Atum com Azeitona')">Pedir</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="sabor-card reveal">
+      <div class="sabor-img">🦐</div>
+      <div class="sabor-body">
+        <h3>Camarão Cremoso</h3>
+        <p>Camarões selecionados mergulhados em um creme suave e temperado, trazendo uma explosão de sabor a cada pedaço.</p>
+        <div class="sabor-footer">
+          <span class="sabor-price">R$ 160,00</span>
+          <button class="sabor-btn" onclick="pedir('Atum com Azeitona')">Pedir</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section id="sabores-af">
+  <h2 class="section-title"><em>Doces</em></h2>
+
+  <div class="sabores-grid">
+
+    <div class="sabor-card reveal">
+      <div class="sabor-img">🍫<span class="sabor-badge">Mais pedido</span></div>
+      <div class="sabor-body">
+        <h3>Brigadeiro</h3>
+        <p>Brigadeiro cremoso com chocolate intenso e granulado, perfeito para quem ama um doce irresistível.</p>
+        <div class="sabor-footer">
+          <span class="sabor-price">R$ 120,00</span>
+          <button class="sabor-btn" onclick="pedir('Frango com Catupiry')">Pedir</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="sabor-card reveal">
+      <div class="sabor-img">🍯</div>
+      <div class="sabor-body">
+        <h3>Doce de Leite</h3>
+        <p>Doce de leite cremoso e suave, trazendo um sabor marcante e uma experiência deliciosa.</p>
+        <div class="sabor-footer">
+          <span class="sabor-price">R$ 120,00</span>
+          <button class="sabor-btn" onclick="pedir('Atum com Azeitona')">Pedir</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="sabor-card reveal">
+      <div class="sabor-img">🍍</div>
+      <div class="sabor-body">
+        <h3>Abacaxi C/ Coco</h3>
+        <p>Abacaxi combinado com coco ralado em uma mistura tropical equilibrada e cheia de sabor.</p>
+        <div class="sabor-footer">
+          <span class="sabor-price">R$ 120,00</span>
+          <button class="sabor-btn" onclick="pedir('Atum com Azeitona')">Pedir</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="sabor-card reveal">
+      <div class="sabor-img">🥥</div>
+      <div class="sabor-body">
+        <h3>Beijinho</h3>
+        <p>Leite condensado com coco ralado, criando um recheio doce, cremoso e extremamente saboroso.</p>
+        <div class="sabor-footer">
+          <span class="sabor-price">R$ 120,00</span>
+          <button class="sabor-btn" onclick="pedir('Atum com Azeitona')">Pedir</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
 
   <!-- SOBRE -->
   <section id="sobre">
@@ -1076,52 +422,10 @@
     <div class="footer-copy">© 2025 Empada Salvador · Sabor da Bahia 🥧</div>
   </footer>
 
-  <script>
-    // Cursor
-    const cursor = document.getElementById('cursor');
-    const ring = document.getElementById('cursorRing');
-    let mx = 0, my = 0, rx = 0, ry = 0;
+  <div class="footer-dev">
+  Desenvolvido por <a href="https://instagram.com/andrealpha.dev" target="_blank">@andrealpha.dev</a>
+</div>
 
-    document.addEventListener('mousemove', e => {
-      mx = e.clientX; my = e.clientY;
-      cursor.style.left = mx + 'px';
-      cursor.style.top = my + 'px';
-    });
-
-    function animRing() {
-      rx += (mx - rx) * 0.12;
-      ry += (my - ry) * 0.12;
-      ring.style.left = rx + 'px';
-      ring.style.top = ry + 'px';
-      requestAnimationFrame(animRing);
-    }
-    animRing();
-
-    document.querySelectorAll('a, button').forEach(el => {
-      el.addEventListener('mouseenter', () => { cursor.classList.add('expand'); ring.classList.add('expand'); });
-      el.addEventListener('mouseleave', () => { cursor.classList.remove('expand'); ring.classList.remove('expand'); });
-    });
-
-    // Scroll reveal
-    const obs = new IntersectionObserver(entries => {
-      entries.forEach((e, i) => {
-        if (e.isIntersecting) {
-          e.target.style.transitionDelay = (e.target.dataset.delay || 0) + 'ms';
-          e.target.classList.add('visible');
-        }
-      });
-    }, { threshold: 0.1 });
-
-    document.querySelectorAll('.reveal').forEach((el, i) => {
-      el.dataset.delay = (i % 4) * 80;
-      obs.observe(el);
-    });
-
-    // Pedir
-    function pedir(sabor) {
-      const msg = encodeURIComponent(`Oi! 😊 Quero fazer uma encomenda do sabor: ${sabor}. Pode me passar mais informações?`);
-      window.open(`https://wa.me/5571993762945?text=${msg}`, '_blank');
-    }
-  </script>
+<script src="script.js"></script>
 </body>
 </html>
